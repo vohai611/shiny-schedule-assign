@@ -35,7 +35,8 @@ gen_w_data <- function(n, day, shift, busy_prob = .2) {
     as_tibble() %>% 
     left_join(people_id,by = 'people') %>% 
     group_by(people) %>% 
-    mutate(w = sample_fun(.env$day * .env$shift, busy_prob))
+    mutate(w = sample_fun(.env$day * .env$shift, busy_prob)) %>% 
+    ungroup()
   
   return(weight_data)
 }
