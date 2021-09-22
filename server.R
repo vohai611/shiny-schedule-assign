@@ -1,6 +1,6 @@
 library(shiny)
-source("linear-programming.R")
-source("handle-upload-file.R")
+source("back-end/linear-programming.R")
+source("back-end/handle-upload-file.R")
 
 server <- function(input, output, session){
   
