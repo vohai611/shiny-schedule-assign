@@ -1,14 +1,16 @@
 library(shiny)
 source("linear-programming.R")
+source("handle-upload-file.R")
 
 server <- function(input, output, session){
   
-
+# Introduction
+  
 # random data block -------------------------------------------------------------------------------------
   n <- eventReactive(input$go, input$n_people)
   day <- eventReactive(input$go, input$n_day)
   shift <- eventReactive(input$go, input$n_shift)
-  
+  busy_prob <- eventReactive(input$go, input$busy_prob)
   
   ## Validate feedback block
   iv <- InputValidator$new()
@@ -24,17 +26,33 @@ server <- function(input, output, session){
 
 
 # user data block ---------------------------------------------------------------------------------------
-
+  # handle error file type
+  
+  # handle file
+  # weight_data <- reactive({
+  #   read_all_sheet(input$file$datapath) %>% 
+  #     clean_user_input()
+  # })
   
 # Both type of input: -----
   
-  people_per_shift <- eventReactive(input$go, input$people_per_shift)
-  cont_w <- eventReactive(input$go, input$cont_w) 
+  people_per_shift <- eventReactive(input$optim, input$people_per_shift)
+  cont_w <- eventReactive(input$optim, input$cont_w) 
   
-  busy_prob <- eventReactive(input$go, input$busy_prob)
   
-  weight_data <- reactive({gen_w_data(n = n(),day = day(), shift = shift(),busy_prob = busy_prob())})
-  
+  #weight_data <- reactive({})
+
+# Weight data -------------------------------------------------------------------------------------------
+
+  weight_data <- eventReactive(req(input$tabs, input$go), {
+    if (! input$tabs == "user_df") {
+      gen_w_data(n = n(),day = day(), shift = shift(),busy_prob = busy_prob())
+    } else {
+      a <- read_all_sheet(input$file$datapath) 
+      if( is.na(a)) validate('Wrong data!')
+      a
+    }
+  })  
 
 # Main panel --------------------------------------------------------------------------------------------
 
@@ -43,6 +61,7 @@ server <- function(input, output, session){
   observeEvent(n(), {
     updateSelectInput(session, 'people_name', choices = unique(weight_data()$name))
   })
+  
   output$review_table <- renderTable({
     
     weight_data() %>%
@@ -55,15 +74,19 @@ server <- function(input, output, session){
   })
   
   ## tab3: result
-  
-  result <- reactive({
+  result <- eventReactive(input$optim, {
     assign_schedule(weight_data(), w_per_shift = people_per_shift(), cont_w =  cont_w())
   })
   
   ### render result
+  
+  join_weight_data <- eventReactive(input$optim,{weight_data() %>% 
+      distinct(name, people)
+  })
+  
   output$result_table <- renderTable({
     get_schedule(result()) %>% 
-      left_join( weight_data() %>% distinct(name, people), by = 'people') %>% 
+      left_join(join_weight_data(), by = 'people') %>% 
       pivot_wider(shift, names_from = day, values_from = name, names_prefix = 'Day ',
                   values_fn =  function(x) str_c(x, collapse = "/"))
   })

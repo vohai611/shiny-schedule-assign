@@ -1,6 +1,6 @@
 library(shiny)
 library(shinyvalidate)
-
+library(tidyverse)
 
 
 ui <- fluidPage(
@@ -9,27 +9,28 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(width = 3,
     fluidRow(
-    tabsetPanel(
-      tabPanel("Random date",
+    tabsetPanel(id = 'tabs',
+      tabPanel("Random data", value ='random_df',
                numericInput("n_people", "Number of people: ", value = 5),
                numericInput("n_day", "Number of days: ", value = 7),
                numericInput("n_shift", "Number of shift per day: ", value = 3),
                sliderInput('busy_prob', "Probability people get busy", min = 0, max = .6,step = .1,value =.2)),
-      tabPanel("User data",
-               fileInput('file', "User file")
+      tabPanel("User data", value ='user_df',
+               fileInput('file', "Upload your file: ", accept = "xlsx"),
+               downloadButton("template", "Download template")
                )
     )
     ),
     fluidRow(
       numericInput("people_per_shift", "Number of people per shift: ", min = 1, max = 5,value = 1),
       checkboxInput('cont_w', "Allow work continously", value = FALSE),
-      actionButton('go', label = "Optimize!")
-      
+      actionButton('go', label = "Generate data"),
+      actionButton('optim',label = 'Optimize!')
     )
       
     ),mainPanel = mainPanel(
       tabsetPanel(
-        tabPanel("Introduction", HTML('Place holder')), 
+        tabPanel("Introduction", HTML(read_lines("Introduction.html"))), 
         tabPanel("Review data",
                  column(width = 3, selectInput('people_name',"Choose people:", choices = NULL)),
                  tableOutput("review_table")), 
