@@ -78,26 +78,33 @@ server <- function(input, output, session){
       select(-name,-people) %>%
       pivot_wider(shift, names_from = day, values_from = w, names_prefix = 'Day ') %>%
       mutate(across(.fns = ~ if_else(
-        .x == -10000, "Can't work", as.character(.x)
+        .x == -10000, "Busy", as.character(.x)
       )))
   })
   
   ## tab3: result
+  
+  ### run model
   result <- eventReactive(input$optim, {
     assign_schedule(weight_data(), w_per_shift = people_per_shift(), cont_w =  cont_w())
   })
   
   ### render result
   
+  # complement data 
   join_weight_data <- eventReactive(input$optim,{weight_data() %>% 
       distinct(name, people)
   })
   
+  # render output data
   output$result_table <- renderTable({
     get_schedule(result()) %>% 
       left_join(join_weight_data(), by = 'people') %>% 
       pivot_wider(shift, names_from = day, values_from = name, names_prefix = 'Day ',
                   values_fn =  function(x) str_c(x, collapse = "/"))
   })
+  
+  ## allow use to download result
+  
   
 }
