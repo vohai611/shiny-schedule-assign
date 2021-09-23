@@ -3,7 +3,7 @@ library(shinyvalidate)
 library(tidyverse)
 
 
-ui <- fluidPage(
+ui <- fluidPage(theme = shinythemes::shinytheme("sandstone"),
   titlePanel('Schedule assign application'),
   tags$br(),
   sidebarLayout(
