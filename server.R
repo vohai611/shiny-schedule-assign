@@ -25,15 +25,6 @@ server <- function(input, output, session){
   })
 
 
-# user data block ---------------------------------------------------------------------------------------
-  # handle error file type
-  
-  # handle file
-  # weight_data <- reactive({
-  #   read_all_sheet(input$file$datapath) %>% 
-  #     clean_user_input()
-  # })
-  
 # Both type of input: -----
   
   people_per_shift <- eventReactive(input$optim, input$people_per_shift)
@@ -43,7 +34,8 @@ server <- function(input, output, session){
   #weight_data <- reactive({})
 
 # Weight data -------------------------------------------------------------------------------------------
-
+  # weight data depend on user choose tab1 or tab2
+  
   weight_data <- eventReactive(req(input$tabs, input$go), {
     if (! input$tabs == "user_df") {
       gen_w_data(n = n(),day = day(), shift = shift(),busy_prob = busy_prob())
@@ -107,21 +99,27 @@ server <- function(input, output, session){
   
   ## allow use to download result
   
-  ## dis play individual result
-  observeEvent(n(), {
+  ## display individual result
+  observeEvent(input$optim , {
     updateSelectInput(session, 'individual_result', choices = unique(weight_data()$name))
   })
-  output$individual_table <- function(){
+  
+  
+  individual_table <- reactive( {
     library(kableExtra)
     weight_data() %>% 
       filter(name == input$individual_result) %>% 
       left_join(get_schedule(result())) %>% 
       mutate(w = if_else(w == -10000, "Busy", as.character(w))) %>% 
-      mutate(w = kableExtra::cell_spec(w, background = if_else(!is.na(value), "firebrick", 'white'))) %>% 
+      mutate(w = cell_spec(w, background = if_else(!is.na(value), "firebrick", 'white'))) %>% 
       pivot_wider(shift, names_from = day, values_from = w, names_prefix = "Day " ) %>% 
       kbl(booktabs = T, linesep = " ", escape=FALSE,) %>% 
-      kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
-    
+      kable_styling(bootstrap_options = "basic", full_width = F, position = "left")
+  })
+  
+
+  output$individual_table <- function(){
+    individual_table()
   }
   
   
