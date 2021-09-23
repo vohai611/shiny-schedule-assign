@@ -35,7 +35,11 @@ ui <- fluidPage(theme = shinythemes::shinytheme("sandstone"),
         tabPanel("Review data",
                  column(width = 3, selectInput('people_name',"Choose people:", choices = NULL)),
                  tableOutput("review_table")), 
-        tabPanel("Schedule assign", tableOutput("result_table"))
+        tabPanel("Schedule assign",
+                 fluidRow(column(width =3), tableOutput("result_table")),
+                 fluidRow(column(width = 3, selectInput('individual_result', "Choose people:", choices = NULL)),
+                          tableOutput("individual_table"))
+                 )
     )
   )
 ))

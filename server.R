@@ -101,10 +101,28 @@ server <- function(input, output, session){
     get_schedule(result()) %>% 
       left_join(join_weight_data(), by = 'people') %>% 
       pivot_wider(shift, names_from = day, values_from = name, names_prefix = 'Day ',
-                  values_fn =  function(x) str_c(x, collapse = "/"))
+                  values_fn =  function(x) str_c(x, collapse = "/")) 
   })
   
+  
   ## allow use to download result
+  
+  ## dis play individual result
+  observeEvent(n(), {
+    updateSelectInput(session, 'individual_result', choices = unique(weight_data()$name))
+  })
+  output$individual_table <- function(){
+    library(kableExtra)
+    weight_data() %>% 
+      filter(name == input$individual_result) %>% 
+      left_join(get_schedule(result())) %>% 
+      mutate(w = if_else(w == -10000, "Busy", as.character(w))) %>% 
+      mutate(w = kableExtra::cell_spec(w, background = if_else(!is.na(value), "firebrick", 'white'))) %>% 
+      pivot_wider(shift, names_from = day, values_from = w, names_prefix = "Day " ) %>% 
+      kbl(booktabs = T, linesep = " ", escape=FALSE,) %>% 
+      kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+    
+  }
   
   
 }
