@@ -49,10 +49,19 @@ server <- function(input, output, session){
       gen_w_data(n = n(),day = day(), shift = shift(),busy_prob = busy_prob())
     } else {
       a <- read_all_sheet(input$file$datapath) 
-      if( is.na(a)) validate('Wrong data!')
+      # check if user input is in correct form
+      if (any(is.na(a)))
+        validate('Wrong data!')
       a
     }
   })  
+  
+  ## allow user to download template
+  output$template <- downloadHandler(filename = function() {"template.xlsx"},
+                                     content = function(file) {
+    df <- template_download(weight_data())
+    writexl::write_xlsx(df, path = file)
+  })
 
 # Main panel --------------------------------------------------------------------------------------------
 

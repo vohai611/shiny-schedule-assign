@@ -14,10 +14,11 @@ ui <- fluidPage(
                numericInput("n_people", "Number of people: ", value = 5),
                numericInput("n_day", "Number of days: ", value = 7),
                numericInput("n_shift", "Number of shift per day: ", value = 3),
-               sliderInput('busy_prob', "Probability people get busy", min = 0, max = .6,step = .1,value =.2)),
+               sliderInput('busy_prob', "Probability people get busy", min = 0, max = .6,step = .1,value =.2),
+               downloadButton("template", "Download template")
+               ),
       tabPanel("User data", value ='user_df',
                fileInput('file', "Upload your file: ", accept = "xlsx"),
-               downloadButton("template", "Download template")
                )
     )
     ),

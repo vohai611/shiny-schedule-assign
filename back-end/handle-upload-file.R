@@ -14,3 +14,16 @@ read_all_sheet <- function(path){
 }  
 
 read_all_sheet <- possibly(read_all_sheet, otherwise = NA)
+
+# Prepare template for user to download from random data
+
+template_download <- function(.tbl) {
+  df <- .tbl %>% 
+    mutate(w = if_else(w == -10000, "Can't work", as.character(w))) %>% 
+    pivot_wider(c(name, shift), names_from = day, values_from = w, names_prefix = "Day ")
+  
+  df %>% 
+    split(df$name) %>% 
+    map(~select(.x,-name)) %>% 
+    return()
+}
