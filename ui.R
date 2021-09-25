@@ -11,6 +11,7 @@ ui <- fluidPage(theme = shinythemes::shinytheme("sandstone"),
     fluidRow(
     tabsetPanel(id = 'tabs',
       tabPanel("Random data", value ='random_df',
+               tags$br(),
                numericInput("n_people", "Number of people: ", value = 5),
                numericInput("n_day", "Number of days: ", value = 7),
                numericInput("n_shift", "Number of shift per day: ", value = 3),
@@ -18,6 +19,7 @@ ui <- fluidPage(theme = shinythemes::shinytheme("sandstone"),
                downloadButton("template", "Download template")
                ),
       tabPanel("User data", value ='user_df',
+               tags$br(),
                fileInput('file', "Upload your file: ", accept = "xlsx"),
                )
     )
@@ -33,12 +35,16 @@ ui <- fluidPage(theme = shinythemes::shinytheme("sandstone"),
       tabsetPanel(
         tabPanel("Introduction", HTML(read_lines("Introduction.html"))), 
         tabPanel("Review data",
+                 tags$br(),
                  column(width = 3, selectInput('people_name',"Choose people:", choices = NULL)),
                  tableOutput("review_table")), 
         tabPanel("Schedule assign",
-                 fluidRow(column(width =3), tableOutput("result_table")),
-                 fluidRow(column(width = 3, selectInput('individual_result', "Choose people:", choices = NULL)),
-                          tableOutput("individual_table"))
+                 tags$br(),
+                 fluidRow(downloadButton("down_result", "Download result")),
+                 fluidRow(tableOutput("result_table")),
+                 tags$br(),
+                 fluidRow(selectInput('individual_result', "Choose people:", choices = NULL)),
+                 fluidRow(tableOutput("individual_table"))
                  )
     )
   )
