@@ -8,12 +8,13 @@ server <- function(input, output, session){
 # Introduction
   
 # random data block -------------------------------------------------------------------------------------
-  # iv <- InputValidator$new()
-  # iv$add_rule("n_people", sv_required(2, 20))
-  # iv$add_rule("n_day", sv_between(7, 28))
-  # iv$add_rule("n_shift", sv_between(2, 5))
-  # iv$enable()
-  
+  # shinyvalidate does not work properly !! 
+  # ivv <- InputValidator$new()
+  # ivv$add_rule("n_people", sv_required(2, 20))
+  # ivv$add_rule("n_day", sv_between(7, 28))
+  # ivv$add_rule("n_shift", sv_between(2, 5))
+  # ivv$enable()
+
   n <- eventReactive(input$go, input$n_people)
   day <- eventReactive(input$go, input$n_day)
   shift <- eventReactive(input$go, input$n_shift)
@@ -23,7 +24,7 @@ server <- function(input, output, session){
   
   # check input value block
   s_stop <-  reactive({
-    if( (!between(n(),2,20)) || (!between(day(), 7, 28)) || (!between(shift(), 2,5 )) ) { TRUE }
+    if( (!between(n(),2,20)) || (!between(day(), 7, 28)) || (!between(shift(), 1,5 )) ) { TRUE }
     else{ FALSE }
   })
 
@@ -36,7 +37,11 @@ server <- function(input, output, session){
   # weight data depend on user choose tab1 or tab2
   
   weight_data <- eventReactive(req(input$tabs, input$go), {
-    if (s_stop()) validate("Input is not valid")
+    if (s_stop()) validate("Input is not valid
+                           people must between 2 and 20,
+                           day must between 7 and 28,
+                           number of shif must between 1 and 5.
+                           Sorry for bad feedback!")
     if (! input$tabs == "user_df") {
       gen_w_data(n = n(),day = input$n_day, shift = shift(),busy_prob = busy_prob())
     } else {
@@ -130,6 +135,17 @@ server <- function(input, output, session){
   output$individual_table <- function(){
     individual_table()
   }
+  
+  ## Display model result
+  output$model_text_result <- renderText({
+    
+    status <- solver_status(result())
+    obj_value <- objective_value(result())
+    
+    paste0("Solver status: ", status,
+           "\nObjective value: ", obj_value)
+  
+  })
   
   
 }

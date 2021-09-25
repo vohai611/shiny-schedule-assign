@@ -40,11 +40,13 @@ ui <- fluidPage(theme = shinythemes::shinytheme("sandstone"),
                  tableOutput("review_table")), 
         tabPanel("Schedule assign",
                  tags$br(),
-                 fluidRow(downloadButton("down_result", "Download result")),
-                 fluidRow(tableOutput("result_table")),
+                 verbatimTextOutput("model_text_result"),
                  tags$br(),
-                 fluidRow(selectInput('individual_result', "Choose people:", choices = NULL)),
-                 fluidRow(tableOutput("individual_table"))
+                 fluidRow(column(3, downloadButton("down_result", "Download result")),
+                                 tableOutput("result_table")),
+                 tags$br(),
+                 fluidRow(column(3, selectInput('individual_result', "Choose people:", choices = NULL)),
+                          tableOutput("individual_table"))
                  )
     )
   )
