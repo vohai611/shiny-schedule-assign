@@ -2,12 +2,27 @@ library(shiny)
 library(shinyvalidate)
 library(tidyverse)
 library(bslib)
-  
-ui <- fluidPage(theme = shinythemes::shinytheme('cosmo'), 
+my_theme <-
+  bs_theme(
+    fg = "rgb(53, 48, 48)",
+    primary = "#52526D",
+    bootswatch = 'flatly',
+    success = "#443763",
+    secondary = "#694141",
+    danger = "#D99F52",
+    `enable-rounded` = TRUE,
+    `enable-transitions` = FALSE,
+    bg = "rgb(255, 255, 255)",
+    base_font = font_google("Lato")
+  )
+
+
+ui <- fluidPage(theme = my_theme, 
   titlePanel('Schedule assign application'),
   tags$br(),
   sidebarLayout(
-    sidebarPanel(width = 3,
+    
+    sidebarPanel = sidebarPanel(width = 3,
     fluidRow(
     tabsetPanel(id = 'tabs',
       tabPanel("Random data", value ='random_df',
@@ -27,12 +42,12 @@ ui <- fluidPage(theme = shinythemes::shinytheme('cosmo'),
     tags$br(),
     fluidRow(
       numericInput("people_per_shift", "Number of people per shift: ", min = 1, max = 5,value = 1),
-      checkboxInput('cont_w', "Allow work continously", value = FALSE),
-      actionButton('go', label = "Generate data"),
-      actionButton('optim',label = 'Optimize!') 
-    )
-      
-    ),mainPanel = mainPanel(
+      checkboxInput('cont_w', "Allow work continously", value = FALSE)),
+    fluidRow(column(7,
+                    actionButton('go', label = "Generate data",width = '100%')),
+             column(5, actionButton('optim', label = 'Optimize!', width = '90%')))),
+    
+    mainPanel = mainPanel(
       tabsetPanel(
         tabPanel("Introduction", includeMarkdown('Introduction.md') ), 
         tabPanel("Review data",
@@ -55,3 +70,4 @@ ui <- fluidPage(theme = shinythemes::shinytheme('cosmo'),
 
 # server_test <- function(input, output, session){}
 # shinyApp(ui, server_test)
+# run_with_themer(shinyApp(ui, server))
