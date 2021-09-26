@@ -1,9 +1,9 @@
 library(shiny)
 library(shinyvalidate)
 library(tidyverse)
-
-
-ui <- fluidPage(theme = shinythemes::shinytheme("sandstone"),
+library(bslib)
+  
+ui <- fluidPage(theme = shinythemes::shinytheme('cosmo'), 
   titlePanel('Schedule assign application'),
   tags$br(),
   sidebarLayout(
@@ -24,16 +24,17 @@ ui <- fluidPage(theme = shinythemes::shinytheme("sandstone"),
                )
     )
     ),
+    tags$br(),
     fluidRow(
       numericInput("people_per_shift", "Number of people per shift: ", min = 1, max = 5,value = 1),
       checkboxInput('cont_w', "Allow work continously", value = FALSE),
       actionButton('go', label = "Generate data"),
-      actionButton('optim',label = 'Optimize!')
+      actionButton('optim',label = 'Optimize!') 
     )
       
     ),mainPanel = mainPanel(
       tabsetPanel(
-        tabPanel("Introduction", HTML(read_lines("Introduction.html"))), 
+        tabPanel("Introduction", includeMarkdown('Introduction.md') ), 
         tabPanel("Review data",
                  tags$br(),
                  column(width = 3, selectInput('people_name',"Choose people:", choices = NULL)),

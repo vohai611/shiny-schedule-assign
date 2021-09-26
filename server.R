@@ -9,11 +9,11 @@ server <- function(input, output, session){
   
 # random data block -------------------------------------------------------------------------------------
   # shinyvalidate does not work properly !! 
-  # ivv <- InputValidator$new()
-  # ivv$add_rule("n_people", sv_required(2, 20))
-  # ivv$add_rule("n_day", sv_between(7, 28))
-  # ivv$add_rule("n_shift", sv_between(2, 5))
-  # ivv$enable()
+  iv <- InputValidator$new()
+  iv$add_rule("n_people", sv_between(2, 20))
+  iv$add_rule("n_day", sv_between(7, 28))
+  iv$add_rule("n_shift", sv_between(2, 5))
+  iv$enable()
 
   n <- eventReactive(input$go, input$n_people)
   day <- eventReactive(input$go, input$n_day)
@@ -40,8 +40,8 @@ server <- function(input, output, session){
     if (s_stop()) validate("Input is not valid
                            people must between 2 and 20,
                            day must between 7 and 28,
-                           number of shif must between 1 and 5.
-                           Sorry for bad feedback!")
+                           number of shift must between 1 and 5.
+                           ")
     if (! input$tabs == "user_df") {
       gen_w_data(n = n(),day = input$n_day, shift = shift(),busy_prob = busy_prob())
     } else {
