@@ -42,7 +42,7 @@ ui <- fluidPage(theme = my_theme,
     tags$br(),
     fluidRow(
       numericInput("people_per_shift", "Number of people per shift: ", min = 1, max = 5,value = 1),
-      checkboxInput('cont_w', "Allow work continously", value = FALSE)),
+      checkboxInput('cont_w', "Allow work continously", value = TRUE)),
     fluidRow(column(7,
                     actionButton('go', label = "Generate data",width = '100%')),
              column(5, actionButton('optim', label = 'Optimize!', width = '90%')))),
