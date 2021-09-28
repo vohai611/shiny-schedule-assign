@@ -19,14 +19,14 @@ my_theme <-
 
 ui <- fluidPage(theme = my_theme, 
   titlePanel('Schedule assign application'),
-  tags$br(),
+  br(),
   sidebarLayout(
     
-    sidebarPanel = sidebarPanel(width = 3,
+    sidebarPanel = sidebarPanel(width = 3,style = "position: relative;",
     fluidRow(
-    tabsetPanel(id = 'tabs',
+    tabsetPanel(type = "pills",id = 'tabs',
       tabPanel("Random data", value ='random_df',
-               tags$br(),
+               br(),
                numericInput("n_people", "Number of people: ", value = 5),
                numericInput("n_day", "Number of days: ", value = 7),
                numericInput("n_shift", "Number of shift per day: ", value = 3),
@@ -34,33 +34,39 @@ ui <- fluidPage(theme = my_theme,
                downloadButton("template", "Download template")
                ),
       tabPanel("User data", value ='user_df',
-               tags$br(),
+               br(),
                fileInput('file', "Upload your file: ", accept = "xlsx"),
                )
     )
     ),
-    tags$br(),
+    br(),
     fluidRow(
-      numericInput("people_per_shift", "Number of people per shift: ", min = 1, max = 5,value = 1),
-      checkboxInput('cont_w', "Allow work continously", value = TRUE)),
-    fluidRow(column(7,
-                    actionButton('go', label = "Generate data",width = '100%')),
-             column(5, actionButton('optim', label = 'Optimize!', width = '90%')))),
+      numericInput("people_per_shift", "Number of people per shift: ", min = 1, max = 5,value = 1)),
+    fluidRow(
+      checkboxInput('cont_w', "Allow work continously", value = TRUE)
+    ),
+    fluidRow(fillRow(flex = c(3,2),
+      actionButton('go', label = "Generate data", width = '80%'),
+      actionButton('optim', label = 'Optimize!', width = '70%')
+    ),
+    br(),
+    br()
+    )),
     
     mainPanel = mainPanel(
       tabsetPanel(
         tabPanel("Introduction", includeMarkdown('Introduction.md') ), 
         tabPanel("Review data",
-                 tags$br(),
+                 br(),
                  column(width = 3, selectInput('people_name',"Choose people:", choices = NULL)),
                  tableOutput("review_table")), 
         tabPanel("Schedule assign",
-                 tags$br(),
+                 br(),
                  verbatimTextOutput("model_text_result"),
-                 tags$br(),
+                 br(),
                  fluidRow(column(3, downloadButton("down_result", "Download result")),
                                  tableOutput("result_table")),
-                 tags$br(),
+                 br(),
                  fluidRow(column(3, selectInput('individual_result', "Choose people:", choices = NULL)),
                           tableOutput("individual_table"))
                  )
