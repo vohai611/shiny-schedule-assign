@@ -19,6 +19,7 @@ my_theme <-
 
 ui <- fluidPage(theme = my_theme, 
   titlePanel('Schedule assign application'),
+  waiter::useWaiter(),
   br(),
   sidebarLayout(
     

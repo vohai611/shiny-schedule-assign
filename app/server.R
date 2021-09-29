@@ -84,6 +84,9 @@ server <- function(input, output, session){
   ## tab3: result -----
   ### run model
   result <- eventReactive(input$optim, {
+    waiter::Waiter$new(id = c("result_table", "individual_table"),
+                       color = waiter::transparent(.6),
+                       html = waiter::spin_3())$show()
     assign_schedule(weight_data(), w_per_shift = people_per_shift(), cont_w =  cont_w())
   })
   

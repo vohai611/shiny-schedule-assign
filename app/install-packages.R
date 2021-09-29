@@ -7,7 +7,8 @@ packages <-
     'kableExtra',
     'ompr',
     'ompr.roi',
-    'ROI.plugin.glpk'
+    'ROI.plugin.glpk',
+    'waiter'
   )
 install.packages(packages)
 
