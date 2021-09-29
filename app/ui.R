@@ -2,6 +2,8 @@ library(shiny)
 library(shinyvalidate)
 library(tidyverse)
 library(bslib)
+library(markdown)
+
 my_theme <-
   bs_theme(
     fg = "rgb(53, 48, 48)",
@@ -56,7 +58,7 @@ ui <- fluidPage(theme = my_theme,
     
     mainPanel = mainPanel(
       tabsetPanel(
-        tabPanel("Introduction", includeMarkdown('Introduction.md') ), 
+        tabPanel("Introduction", shiny::includeMarkdown('Introduction.md')), 
         tabPanel("Review data",
                  br(),
                  column(width = 3, selectInput('people_name',"Choose people:", choices = NULL)),
@@ -76,6 +78,3 @@ ui <- fluidPage(theme = my_theme,
   )
 ))
 
-# server_test <- function(input, output, session){}
-# shinyApp(ui, server_test)
-# run_with_themer(shinyApp(ui, server))

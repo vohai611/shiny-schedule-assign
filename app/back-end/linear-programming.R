@@ -1,6 +1,5 @@
 
 library(ompr)
-library(ompr.roi)
 library(ROI.plugin.glpk)
 library(tidyverse)
 
@@ -44,7 +43,7 @@ gen_w_data <- function(n, day, shift, busy_prob = .2) {
 
 # build and solve model
 library(ompr.roi)
-library('ROI.plugin.glpk')
+library(ROI.plugin.glpk)
 
 assign_schedule <- function(data, w_per_shift, cont_w = TRUE) {
   n <- length(unique(data$people))
