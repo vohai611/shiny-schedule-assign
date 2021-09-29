@@ -65,10 +65,11 @@ ui <- fluidPage(theme = my_theme,
                  verbatimTextOutput("model_text_result"),
                  br(),
                  fluidRow(column(3, downloadButton("down_result", "Download result")),
-                                 tableOutput("result_table")),
+                          column(9, tableOutput("result_table"))
+                                  ),
                  br(),
                  fluidRow(column(3, selectInput('individual_result', "Choose people:", choices = NULL)),
-                          tableOutput("individual_table"))
+                          column(9,tableOutput("individual_table")) )
                  )
     )
   )

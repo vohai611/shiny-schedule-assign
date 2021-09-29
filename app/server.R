@@ -12,7 +12,7 @@ server <- function(input, output, session){
   iv <- InputValidator$new()
   iv$add_rule("n_people", sv_between(2, 20))
   iv$add_rule("n_day", sv_between(7, 28))
-  iv$add_rule("n_shift", sv_between(2, 5))
+  iv$add_rule("n_shift", sv_between(1, 5))
   iv$enable()
 
   n <- eventReactive(input$go, input$n_people)
