@@ -45,7 +45,7 @@ gen_w_data <- function(n, day, shift, busy_prob = .2) {
 library(ompr.roi)
 library(ROI.plugin.glpk)
 
-assign_schedule <- function(data, w_per_shift, cont_w = TRUE) {
+assign_schedule <- function(data, w_per_shift, cont_w = TRUE, max_work_days) {
   n <- length(unique(data$people))
   day <- length(unique(data$day))
   shift <- length(unique(data$shift))
@@ -71,7 +71,9 @@ assign_schedule <- function(data, w_per_shift, cont_w = TRUE) {
     add_constraint(sum_expr(x[i,j,t], t = 1:shift) <= 1, i = 1:n, j = 1:day) %>% 
     # people does not work x days in a row
     add_constraint(sum_expr(x[i,j,t] , t = 1:shift) + sum_expr(x[i, j+1, t], t = 1:shift)
-                   <= cont_w, i = 1:n, j= 1:(day-1))
+                   <= cont_w, i = 1:n, j= 1:(day-1)) %>% 
+    # maximum working days
+    add_constraint(sum_expr(x[i,j,t], j= 1:day, t = 1:shift) <= max_work_days, i= 1:n)
   
   result <- solve_model(model, with_ROI(solver = "glpk", verbose = TRUE))
   

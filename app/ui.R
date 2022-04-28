@@ -46,6 +46,9 @@ ui <- fluidPage(theme = my_theme,
     fluidRow(
       numericInput("people_per_shift", "Number of people per shift: ", min = 1, max = 5,value = 1)),
     fluidRow(
+      numericInput("max_work_days", "Maximum number of working days: ", min = 1, max = 1000, value = 1000)
+    ),
+    fluidRow(
       checkboxInput('cont_w', "Allow work continously", value = TRUE)
     ),
     fluidRow(fillRow(flex = c(3,2),

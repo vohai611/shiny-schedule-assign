@@ -16,6 +16,8 @@ server <- function(input, output, session){
   observeEvent(input$optim,
                updateTabsetPanel(session, "main", selected =  "Schedule assign"))
   
+  ##
+  
   # shinyvalidate does not work properly !! 
   iv <- InputValidator$new()
   iv$add_rule("n_people", sv_between(2, 20))
@@ -27,6 +29,7 @@ server <- function(input, output, session){
   day <- eventReactive(input$go, input$n_day)
   shift <- eventReactive(input$go, input$n_shift)
   busy_prob <- eventReactive(input$go, input$busy_prob)
+  max_work_days <- eventReactive(input$go, input$max_work_days)
   
   ## Validate feedback block
   
@@ -95,7 +98,7 @@ server <- function(input, output, session){
     waiter::Waiter$new(id = c("result_table", "individual_table"),
                        color = waiter::transparent(.6),
                        html = waiter::spin_3())$show()
-    assign_schedule(weight_data(), w_per_shift = people_per_shift(), cont_w =  cont_w())
+    assign_schedule(weight_data(), w_per_shift = people_per_shift(), cont_w =  cont_w(), max_work_days())
   })
   
   ### render result
