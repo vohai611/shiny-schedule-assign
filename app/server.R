@@ -8,6 +8,14 @@ server <- function(input, output, session){
 # Introduction
   
 # random data block -------------------------------------------------------------------------------------
+  # auto change tab (observe event)
+  observeEvent(input$go,
+               updateTabsetPanel(session,
+                                 "main", selected = "Review data"))
+  
+  observeEvent(input$optim,
+               updateTabsetPanel(session, "main", selected =  "Schedule assign"))
+  
   # shinyvalidate does not work properly !! 
   iv <- InputValidator$new()
   iv$add_rule("n_people", sv_between(2, 20))

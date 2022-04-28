@@ -57,7 +57,7 @@ ui <- fluidPage(theme = my_theme,
     )),
     
     mainPanel = mainPanel(
-      tabsetPanel(
+      tabsetPanel(id = "main",
         tabPanel("Introduction", shiny::includeMarkdown('Introduction.md')), 
         tabPanel("Review data",
                  br(),
