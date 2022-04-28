@@ -16,7 +16,24 @@ server <- function(input, output, session){
   observeEvent(input$optim,
                updateTabsetPanel(session, "main", selected =  "Schedule assign"))
   
-  ##
+  ## deactive optimze button when not generate data
+  observeEvent({
+    input$n_people
+    input$n_day
+    input$n_shift
+    input$busy_prob
+  }, 
+    {output$ui_optim = renderUI("") }
+  )
+  
+  observeEvent({
+    input$go
+  },
+  {output$ui_optim = renderUI(
+    actionButton('optim', label = 'Optimize!', width = '70%'))}
+  
+  )
+  
   
   # shinyvalidate does not work properly !! 
   iv <- InputValidator$new()
@@ -29,8 +46,7 @@ server <- function(input, output, session){
   day <- eventReactive(input$go, input$n_day)
   shift <- eventReactive(input$go, input$n_shift)
   busy_prob <- eventReactive(input$go, input$busy_prob)
-  max_work_days <- eventReactive(input$go, input$max_work_days)
-  
+
   ## Validate feedback block
   
   # check input value block
@@ -43,6 +59,7 @@ server <- function(input, output, session){
 # Both type of input: -----
   people_per_shift <- eventReactive(input$optim, input$people_per_shift)
   cont_w <- eventReactive(input$optim, input$cont_w) 
+  max_work_days =  eventReactive(input$optim, input$max_work_days)
   
 # Weight data -------------------------------------------------------------------------------------------
   # weight data depend on user choose tab1 or tab2

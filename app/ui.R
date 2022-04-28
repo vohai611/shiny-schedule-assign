@@ -53,7 +53,7 @@ ui <- fluidPage(theme = my_theme,
     ),
     fluidRow(fillRow(flex = c(3,2),
       actionButton('go', label = "Generate data", width = '80%'),
-      actionButton('optim', label = 'Optimize!', width = '70%')
+      uiOutput("ui_optim")
     ),
     br(),
     br()
