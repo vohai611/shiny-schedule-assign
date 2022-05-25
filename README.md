@@ -5,7 +5,7 @@ Hai Vo
 This is an repository of my “Schedule assign” shiny web app. This app
 allow user to assign schedule to the group of people working on a shift
 basis. This app using `{ompr}` as an interface to write mathematics MIP
-model and `{glpk}` as a solver.
+model and `{glpk}` as a solver. You can read Vietnamese manual [here](https://github.com/vohai611/shiny-schedule-assign/blob/master/app/Introduction.md)
 
 Please visit the app
 [here](https://haivo.shinyapps.io/schedule-optimizer/)
